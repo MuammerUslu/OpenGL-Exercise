@@ -1,0 +1,8 @@
+1- VScode içerisinde çalıştırmak için tasks.json oluşturulmadan önce terminalden build alma:
+    mkdir build // build dosyası oluştur
+    cd build // build klasörüne git
+    cmake .. // .. ile bir üst klasöre çık ve oradaki cmakelists.txt ile bulunduğumuz build klasörüne build al. 
+    ls // build dosyası içerisindeki dosyalar =>  CMakeCache.txt, CMakeFiles, Makefile, cmake_install.cmake  //make dosyası oluşturulmuş oldu
+    make // komutuyla executable dosyamız oluşturuldu. 
+    ls // build dosyası içerisindeki dosyalar =>  CMakeCache.txt, CMakeFiles, Makefile, OpenGLExercise, cmake_install.cmake  // "OpenGLExercise" executable dosyası oluşturulmuş oldu
+
