@@ -1,0 +1,48 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CMake",
+            "type": "shell",
+            "command": "cmake",
+            "options": {
+                "cwd": "${workspaceFolder}/build" // hangi klasör içerisinden çağırılacağı
+            },
+            "args": [
+                "${workspaceFolder}"
+            ],
+            "group": {
+                "kind": "build", // build görevi olduğunu belirttik. Build görevleri cmd+shift+b ile yapılabilir.
+                "isDefault": true
+            },
+            "dependsOn":[  // CMake task'ı çalıştırılmadan CreateBuildDirectory task'ı çalıştırılsın.
+                "CreateBuildDirectory"
+            ]
+        },
+        {
+            "label": "CreateBuildDirectory", //build isminde bir directory yoksa yukarıdaki task çalışamaz. build klasörü yoksa oluşurulması için yazdığımız task.
+            "type": "shell",
+            "command": "mkdir", //komut
+            "options": {
+                "cwd": "${workspaceFolder}" // project directory'de oluşturmak için kod orada run'lanmalı bir dışarıda isteseydik =>"cwd": "${workspaceFolder}/.." yazacaktık
+            },
+            "args": [
+                "-p", // daha önceden build diye bir klasör varsa "-p" olmadan hata alırız. "-p" ile bu task çalıştırılamadığı durumlarda hata dönmeyecek. diğer taskları engellemeyecek
+                "build" // mkdir'e verdiğimiz arg -> mkdir build // yani build isminde bir klasör oluşturmuş olduk.
+            ]
+        }, // bu şekilde bir task oluşturulduğunda Terminal->Run Task dersek "CMake" ve "CreateBuildDirectory" seçeneklerini görebilir ve istediğimiz run'layabiliriz.
+        {
+            "label": "Make", //Oluşturulan CMake dosyalarından make ile build oluşturulması
+            "type": "shell",
+            "command": "make",
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "args": [
+                "-l", // paralel core'ları kullanarak build alma
+            ]
+        }
+    ]
+}
