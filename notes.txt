@@ -6,3 +6,12 @@
     make // komutuyla executable dosyamız oluşturuldu. 
     ls // build dosyası içerisindeki dosyalar =>  CMakeCache.txt, CMakeFiles, Makefile, OpenGLExercise, cmake_install.cmake  // "OpenGLExercise" executable dosyası oluşturulmuş oldu
 
+2- GLFW
+    farklı platformlarda pencere oluşturablirmemizi sağlıyor.
+    io ekipmanlarının kontrolünü sağlıyor
+    kullanmazsak her platform için ayrı kodlar yazmamız lazım.
+    static olarak ekleyeceğiz
+
+    source dosyasını yükledik. v3.4. (içerisinde cmakelists.txt bulunan)
+    cmake ..// build klasörü açtık ve klasör içerisinde "cmake .." kodu ile make file oluşturduk.
+    sudo make install // sudo ile admin olduk, make ile make dosyasından build aldık, install ile usr/local dosyasına da kopyaladık
