@@ -1,4 +1,5 @@
 #include <iostream>
+#include <glad/glad.h> //glfw'dan önce include edilmesi gerekiyor
 #include <GLFW/glfw3.h>
 
 int main(int argc , char** argv)
