@@ -15,3 +15,11 @@
     source dosyasını yükledik. v3.4. (içerisinde cmakelists.txt bulunan)
     cmake ..// build klasörü açtık ve klasör içerisinde "cmake .." kodu ile make file oluşturduk.
     sudo make install // sudo ile admin olduk, make ile make dosyasından build aldık, install ile usr/local dosyasına da kopyaladık
+
+3-GLAD
+    OpenGL dinamik kütüphanesiyle iletişim kurmak. BU kütüphaneler window'ta OpenGL.dll,linuxta libGL.so .. -framework OpenGL
+    Çalışma anında yüklenir. o anda library'ler içerisindeki methodların anlık olarak adreslerinin bilimesi gerekiyor ki çağırılsın.
+    Glad bu işi yapıyor. OpenGL'in methodlarını kullanmak için glad'ı kullanıyoruz.
+    Derlenmiş bir halde gelmedi. projemizle beraber derleyeceğiz.
+    glad.dav1d adresinden glad'ı indiriyoruz (Core seçtik). glad.c'yi kendi src klasörümüze atıyoruz. include içerisinde bulunan glad ve KHR dosyalarını da include dosyasının içerisine atıyoruz.
+    
