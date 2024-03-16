@@ -1,10 +1,29 @@
 #include <iostream>
-#include "math.hpp"   
+#include <GLFW/glfw3.h>
 
-int main(int argc , char** argv){
+int main(int argc , char** argv)
+{
+    if(!glfwInit())
+        return-1;
 
-    std::cout<<Add(10,20)<<std::endl;
+    GLFWwindow* window = glfwCreateWindow(800,600,"First Program",NULL,NULL);
 
-    std::cin.get();
+    if(window==NULL)
+    {
+        std::cout<< "Window could not be created"<<std::endl;
+
+        glfwTerminate();
+
+        return -1;
+    }
+
+    glfwMakeContextCurrent(window);
+
+    while(!glfwWindowShouldClose(window))
+    {
+        glfwSwapBuffers(window);
+
+        glfwPollEvents();
+    }
 
 }
