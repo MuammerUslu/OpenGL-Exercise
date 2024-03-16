@@ -17,4 +17,13 @@ set(PROJECT_HEADERS
 
 include_directories(${PROJECT_INCLUDE_DIR})
 
+#Required yazdığımızda bulma işlemi başarısız olursa hata alırız işlem sonlanır. min v3.2 required
+#glfw3 dosyasını arar
+#cmake arama işlemlerini usr/local/ib/cmake içerisini tarar
+#glfw zaten derlenmiş bir proje. derleme esansında değil linking esnasında bağlanacak
+find_package(glfw3 3.2 REQUIRED) 
+
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
+
+#OpenGlExercise projesini glfw kütüphanesiyle bağla
+target_link_libraries(${PROJECT_NAME} glfw)
