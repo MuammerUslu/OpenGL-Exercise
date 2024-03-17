@@ -26,4 +26,4 @@
 4-GLM
     GLM kütüphanesi bazı matrix hesaplamaları gibi bize yardımcı olabilecek methodlar içerir.
     "https://github.com/g-truc/glm/tags" adresinden zip'indirip. directory içerisinde build klasörü oluşturup. "cmake .." ve "sudo make install" komutlarıyla kütüphaneyi ekledik.
-    Aynı Glfw gibi eklendi ve cmakelists.txt dosyasına da eklenecek.
+    Aynı Glfw gibi eklendi ve cmakelists.txt dosyasına da eklenecek. Include dosyalarını ekle.
