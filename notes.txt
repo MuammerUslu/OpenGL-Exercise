@@ -22,4 +22,8 @@
     Glad bu işi yapıyor. OpenGL'in methodlarını kullanmak için glad'ı kullanıyoruz.
     Derlenmiş bir halde gelmedi. projemizle beraber derleyeceğiz.
     glad.dav1d adresinden glad'ı indiriyoruz (Core seçtik). glad.c'yi kendi src klasörümüze atıyoruz. include içerisinde bulunan glad ve KHR dosyalarını da include dosyasının içerisine atıyoruz.
-    
+
+4-GLM
+    GLM kütüphanesi bazı matrix hesaplamaları gibi bize yardımcı olabilecek methodlar içerir.
+    "https://github.com/g-truc/glm/tags" adresinden zip'indirip. directory içerisinde build klasörü oluşturup. "cmake .." ve "sudo make install" komutlarıyla kütüphaneyi ekledik.
+    Aynı Glfw gibi eklendi ve cmakelists.txt dosyasına da eklenecek.
