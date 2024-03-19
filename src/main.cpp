@@ -36,7 +36,10 @@ int main(int argc , char** argv)
 {
     if(!glfwInit())
         return-1;
-    
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
     GLFWwindow* window = glfwCreateWindow(800,600,"First Program",NULL,NULL);
 
     if(window==NULL)
