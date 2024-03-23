@@ -10,6 +10,14 @@ ShaderProgram::~ShaderProgram()
 {
     glDeleteProgram(m_ProgramId);
 }
+void ShaderProgram::addUniform(const std::string& varName)
+{
+    m_UniformVars[varName] =   glGetUniformLocation(m_ProgramId,varName.c_str());
+}
+void ShaderProgram::setFloat(const std::string& varName,float value)
+{
+    glUniform1f(m_UniformVars[varName],value);
+}
 void ShaderProgram::link()
 {
     glLinkProgram(m_ProgramId);

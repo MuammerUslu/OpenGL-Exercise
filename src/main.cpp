@@ -5,18 +5,33 @@
 
 //noktalara ait koordinat bilgileri.
 float vertices[] = {
-    -0.6f, -0.6f, 0.0f,
-     0.6f, -0.6f, 0.0f,
-     0.0f,  0.0f, 0.0f,
-     -0.6f, 0.6f, 0.0f,
-    0.6f, 0.6f, 0.0f,
-    0.0f,  0.0f, 0.0f
+    -0.20f, -0.20f, 0.0f,
+     0.20f, -0.20f, 0.0f,
+     0.20f,  0.20f, 0.0f,
+     -0.20f, -0.20f, 0.0f,
+    -0.20f, 0.20f, 0.0f,
+    0.20f,  0.20f, 0.0f
 };
 
 //vertex array object
 unsigned int VAO;
 //vertex buffer object
 unsigned int VBO;
+
+float moveValX=0.0f;
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_ESCAPE)
+        glfwTerminate();
+    if(key==GLFW_KEY_LEFT)
+    {
+        moveValX-=0.1;
+    }
+    if(key==GLFW_KEY_RIGHT)
+    {
+        moveValX+=0.1;
+    }}
 
 int main(int argc , char** argv)
 {
@@ -37,6 +52,7 @@ int main(int argc , char** argv)
         return -1;
     }
 
+    glfwSetKeyCallback(window, key_callback);
     glfwMakeContextCurrent(window);
 
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -50,6 +66,8 @@ int main(int argc , char** argv)
     program.attachShader("../shaders/simplevs.glsl",GL_VERTEX_SHADER);
     program.attachShader("../shaders/simplefs.glsl",GL_FRAGMENT_SHADER);
     program.link();
+
+    program.addUniform("uMoveX");
 
     glGenVertexArrays(1,&VAO);
     glGenBuffers(1,&VBO);
@@ -70,11 +88,12 @@ int main(int argc , char** argv)
         //çizimde kullanılacak olan program nesnesi aktif ediliyor
         program.use();
 
+        program.setFloat("uMoveX", moveValX);
+
         //çizimde kullanılacak olan Vertex array object aktif ediliyor
         glBindVertexArray(VAO);
         //çizim komutu gönderiliyor
         glDrawArrays(GL_TRIANGLES, 0, 6);
-
 
         glfwSwapBuffers(window);
 
