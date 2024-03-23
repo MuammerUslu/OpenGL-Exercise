@@ -1,32 +1,15 @@
 #include <iostream>
 #include <glad/glad.h> //glfw'dan önce include edilmesi gerekiyor
 #include <GLFW/glfw3.h>
-
-//vertex shader kaynak kodu
-const char* vssource =
-"#version 330 core\n                                    \
- layout (location = 0) in vec3 inPosition;              \
- void main(){                                           \
-    gl_Position = vec4(inPosition, 1.0);                \
-}";
-//fragment shader kaynak kodu
-const char* fssource =
-"#version 330 core\n                                    \
- out vec4 fragColor;                                    \
- void main(){                                           \
-    fragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);           \
- }";
+#include "shaderprogram.hpp"
 
 //noktalara ait koordinat bilgileri.
 float vertices[] = {
     -0.6f, -0.6f, 0.0f,
      0.5f, -0.5f, 0.0f,
      0.0f,  0.5f, 0.0f
-}; 
+};
 
-unsigned int programId;
-unsigned int fragmentShader;
-unsigned int vertexShader;
 //vertex array object
 unsigned int VAO;
 //vertex buffer object
@@ -59,21 +42,11 @@ int main(int argc , char** argv)
         return -1;
     }
 
-    //Vertex Shader
-    vertexShader =glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader,1,&vssource,NULL); //vertexShaderId'ye,1 adet char* (char* array de olabilirdi) ve bu char* vssource
-    glCompileShader(vertexShader); // belirttiğimiz shader'ı derle. Bu derleme grafik kartında yapılır.
+    ShaderProgram program;
 
-    //Fragment Shader
-    fragmentShader =glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader,1,&fssource,NULL); 
-    glCompileShader(fragmentShader);
-
-    //Create Program
-    programId = glCreateProgram();
-    glAttachShader(programId,vertexShader);  //Attach Shaders --shader compile edilmiş olmalı
-    glAttachShader(programId,fragmentShader);
-    glLinkProgram(programId);
+    program.attachShader("../shaders/simplevs.glsl",GL_VERTEX_SHADER);
+    program.attachShader("../shaders/simplefs.glsl",GL_FRAGMENT_SHADER);
+    program.link();
 
     glGenVertexArrays(1,&VAO);
     glGenBuffers(1,&VBO);
@@ -88,11 +61,12 @@ int main(int argc , char** argv)
 
     while(!glfwWindowShouldClose(window))
     {
-        glClearColor(0.0f,0.5f,0.5f,1.0f);//ekranı temizleyip rengini veriyoruz
+        glClearColor(0.0f,0.25f,0.5f,1.0f);//ekranı temizleyip rengini veriyoruz
         glClear(GL_COLOR_BUFFER_BIT);
 
         //çizimde kullanılacak olan program nesnesi aktif ediliyor
-        glUseProgram(programId);
+        program.use();
+
         //çizimde kullanılacak olan Vertex array object aktif ediliyor
         glBindVertexArray(VAO);
         //çizim komutu gönderiliyor

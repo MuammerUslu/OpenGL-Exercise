@@ -11,7 +11,9 @@ set(PROJECT_SOURCE_DIR ${PROJECT_DIR}/src)
 set( PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/math.cpp 
         ${PROJECT_SOURCE_DIR}/main.cpp
-        ${PROJECT_SOURCE_DIR}/glad.c) #glad kütüphanesi de projemizle beraber derlenecek.
+        ${PROJECT_SOURCE_DIR}/glad.c
+        ${PROJECT_SOURCE_DIR}/shaderprogram.cpp
+) #glad kütüphanesi de projemizle beraber derlenecek.
 
 set(PROJECT_HEADERS
         $(PROJECT_INCLUDE_DIR)/math.hpp)
