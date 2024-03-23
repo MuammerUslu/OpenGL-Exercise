@@ -6,8 +6,11 @@
 //noktalara ait koordinat bilgileri.
 float vertices[] = {
     -0.6f, -0.6f, 0.0f,
-     0.5f, -0.5f, 0.0f,
-     0.0f,  0.5f, 0.0f
+     0.6f, -0.6f, 0.0f,
+     0.0f,  0.0f, 0.0f,
+     -0.6f, 0.6f, 0.0f,
+    0.6f, 0.6f, 0.0f,
+    0.0f,  0.0f, 0.0f
 };
 
 //vertex array object
@@ -70,7 +73,7 @@ int main(int argc , char** argv)
         //çizimde kullanılacak olan Vertex array object aktif ediliyor
         glBindVertexArray(VAO);
         //çizim komutu gönderiliyor
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
 
         glfwSwapBuffers(window);
