@@ -2,6 +2,8 @@
 #include<glad/glad.h>
 #include<fstream>
 #include<iostream>
+#include <glm/glm.hpp>
+
 ShaderProgram::ShaderProgram()
 {
     m_ProgramId =glCreateProgram();
@@ -18,6 +20,12 @@ void ShaderProgram::setFloat(const std::string& varName,float value)
 {
     glUniform1f(m_UniformVars[varName],value);
 }
+
+void ShaderProgram::setVec3(const std::string& varName,glm::vec3 value)
+{
+    glUniform3f(m_UniformVars[varName],value.x,value.y,value.z);
+}
+
 void ShaderProgram::link()
 {
     glLinkProgram(m_ProgramId);

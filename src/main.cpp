@@ -2,15 +2,20 @@
 #include <glad/glad.h> //glfw'dan önce include edilmesi gerekiyor
 #include <GLFW/glfw3.h>
 #include "shaderprogram.hpp"
+#include <glm/glm.hpp>
+
+glm::vec3 position = glm::vec3(0.0f,0.0f,0.0f);
+float length=0.08f;
 
 //noktalara ait koordinat bilgileri.
 float vertices[] = {
-    -0.20f, -0.20f, 0.0f,
-     0.20f, -0.20f, 0.0f,
-     0.20f,  0.20f, 0.0f,
-     -0.20f, -0.20f, 0.0f,
-    -0.20f, 0.20f, 0.0f,
-    0.20f,  0.20f, 0.0f
+    -length*0.5f, length*0.5f, 0.0f,
+    -length*0.5f, -length*0.5f, 0.0f,
+    length*0.5f,  -length*0.5f, 0.0f,
+
+    -length*0.5f, length*0.5f, 0.0f,
+    length*0.5f,  -length*0.5f, 0.0f,
+    length*0.5f, length*0.5f, 0.0f,
 };
 
 //vertex array object
@@ -18,20 +23,33 @@ unsigned int VAO;
 //vertex buffer object
 unsigned int VBO;
 
-float moveValX=0.0f;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_ESCAPE)
         glfwTerminate();
-    if(key==GLFW_KEY_LEFT)
+
+    if(action==GLFW_PRESS)
     {
-        moveValX-=0.1;
+        if(key==GLFW_KEY_LEFT)
+        {
+            position+= glm::vec3(-length,0.0f,0.0f);
+        }
+        if(key==GLFW_KEY_RIGHT)
+        {
+            position+= glm::vec3(length,0.0f,0.0f);
+        }
+        if(key==GLFW_KEY_UP)
+        {
+            position+= glm::vec3(0.0f,length,0.0f);
+        }
+        if(key==GLFW_KEY_DOWN)
+        {
+            position+= glm::vec3(0.0f,-length,0.0f);
+        }
     }
-    if(key==GLFW_KEY_RIGHT)
-    {
-        moveValX+=0.1;
-    }}
+
+}
 
 int main(int argc , char** argv)
 {
@@ -41,7 +59,7 @@ int main(int argc , char** argv)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-    GLFWwindow* window = glfwCreateWindow(800,600,"First Program",NULL,NULL);
+    GLFWwindow* window = glfwCreateWindow(800,800,"First Program",NULL,NULL);
 
     if(window==NULL)
     {
@@ -88,7 +106,8 @@ int main(int argc , char** argv)
         //çizimde kullanılacak olan program nesnesi aktif ediliyor
         program.use();
 
-        program.setFloat("uMoveX", moveValX);
+        //program.setFloat("uMoveX", moveValX);
+        program.setVec3("uMove", position);
 
         //çizimde kullanılacak olan Vertex array object aktif ediliyor
         glBindVertexArray(VAO);
