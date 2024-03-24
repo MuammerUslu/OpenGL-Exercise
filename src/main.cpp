@@ -5,6 +5,10 @@
 #include <glm/glm.hpp>
 
 glm::vec3 position = glm::vec3(0.0f,0.0f,0.0f);
+glm::vec4 color1 = glm::vec4(0.5f, 0.0f, 0.5f, 1.0f);
+glm::vec4 color2 = glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);
+glm::vec4 color3 = glm::vec4(0.0f, 0.5f, 0.5f, 1.0f);
+
 float length=0.08f;
 
 //noktalara ait koordinat bilgileri.
@@ -85,7 +89,8 @@ int main(int argc , char** argv)
     program.attachShader("../shaders/simplefs.glsl",GL_FRAGMENT_SHADER);
     program.link();
 
-    program.addUniform("uMoveX");
+    program.addUniform("uMove");
+    program.addUniform("uColor");
 
     glGenVertexArrays(1,&VAO);
     glGenBuffers(1,&VBO);
@@ -106,12 +111,19 @@ int main(int argc , char** argv)
         //çizimde kullanılacak olan program nesnesi aktif ediliyor
         program.use();
 
-        //program.setFloat("uMoveX", moveValX);
-        program.setVec3("uMove", position);
-
         //çizimde kullanılacak olan Vertex array object aktif ediliyor
         glBindVertexArray(VAO);
-        //çizim komutu gönderiliyor
+
+        program.setVec3("uMove", position);
+        program.setVec4("uColor", color1);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        program.setVec3("uMove", position+glm::vec3 (length,0.0,0.0));
+        program.setVec4("uColor", color2);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        program.setVec3("uMove", position+glm::vec3 (0.0,length,0.0));
+        program.setVec4("uColor", color3);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glfwSwapBuffers(window);
