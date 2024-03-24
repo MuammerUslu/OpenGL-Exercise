@@ -1,15 +1,15 @@
 #include <iostream>
+#include <thread>         // std::this_thread::sleep_for
+#include <chrono>         // std::chrono::seconds
 #include <glad/glad.h> //glfw'dan önce include edilmesi gerekiyor
 #include <GLFW/glfw3.h>
 #include "shaderprogram.hpp"
 #include <glm/glm.hpp>
-
-glm::vec3 position = glm::vec3(0.0f,0.0f,0.0f);
-glm::vec4 color1 = glm::vec4(0.5f, 0.0f, 0.5f, 1.0f);
-glm::vec4 color2 = glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);
-glm::vec4 color3 = glm::vec4(0.0f, 0.5f, 0.5f, 1.0f);
+#include "Square.hpp"
 
 float length=0.08f;
+
+Square square(0.0f,0.0f,length);
 
 //noktalara ait koordinat bilgileri.
 float vertices[] = {
@@ -37,19 +37,19 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     {
         if(key==GLFW_KEY_LEFT)
         {
-            position+= glm::vec3(-length,0.0f,0.0f);
+            square.setDirection(Square::DIR_LEFT);
         }
         if(key==GLFW_KEY_RIGHT)
         {
-            position+= glm::vec3(length,0.0f,0.0f);
+            square.setDirection(Square::DIR_RIGHT);
         }
         if(key==GLFW_KEY_UP)
         {
-            position+= glm::vec3(0.0f,length,0.0f);
+            square.setDirection(Square::DIR_UP);
         }
         if(key==GLFW_KEY_DOWN)
         {
-            position+= glm::vec3(0.0f,-length,0.0f);
+            square.setDirection(Square::DIR_DOWN);
         }
     }
 
@@ -114,18 +114,13 @@ int main(int argc , char** argv)
         //çizimde kullanılacak olan Vertex array object aktif ediliyor
         glBindVertexArray(VAO);
 
-        program.setVec3("uMove", position);
-        program.setVec4("uColor", color1);
+        program.setVec3("uMove", square.getPosition());
+        program.setVec4("uColor", square.getColor());
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
-        program.setVec3("uMove", position+glm::vec3 (length,0.0,0.0));
-        program.setVec4("uColor", color2);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        square.move();
 
-        program.setVec3("uMove", position+glm::vec3 (0.0,length,0.0));
-        program.setVec4("uColor", color3);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-
+        std::this_thread::sleep_for (std::chrono::milliseconds(50));
         glfwSwapBuffers(window);
 
         glfwPollEvents();
