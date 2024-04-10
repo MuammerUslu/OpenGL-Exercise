@@ -3,8 +3,16 @@
 
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
-#include<vector>
-#include<cmath>
+#include <vector>
+#include <cmath>
+#include<glm/gtx/matrix_transform_2d.hpp>
+
+struct Transform{
+    glm::mat3 transformMatrix;
+    float rotation;
+    glm::vec2 position;
+    float scale;
+};
 
 class Square {
 public:
@@ -18,27 +26,40 @@ public:
         DIR_DOWN = -2
     };
 
+    enum SCALE
+    {
+        UP,
+        DOWN
+    };
+
+
+    enum ROTATE
+    {
+        CLOCKWISE,
+        COUNTER_CLOCKWISE
+    };
+
     Square(float x,float y, float length);
 
-    glm::vec3 getPosition();
     glm::vec4 getColor();
-    void move();
-    void setDirection(DIRECTION direction);
+    void move(DIRECTION direction);
+    void scale(SCALE scale);
+    void rotate(ROTATE rotate);
     const void* getVertices();
     const void* getIndices();
+    const glm::mat3* getTransformMatrix();
     int getSizeOfVertices();
     int getSizeOfIndices();
     int getCountOfIndices();
 
 private:
-   glm::vec3 m_Position;
    glm::vec4 m_Color;
    float m_length;
-
+   Transform m_transform;
    std::vector<glm::vec3> m_vertices;
    std::vector<unsigned int> m_indices;
-   DIRECTION m_Direction;
 };
+
 
 
 #endif //OPENGLEXERCISE_SQUARE_HPP

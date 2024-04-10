@@ -7,35 +7,35 @@
 
 Square::Square(float x, float y, float length)
 {
-    m_Position = glm::vec3 (x,y,0.0);
-
     m_Color.r = ((10+std::rand()) % 25) * 0.04f;
     m_Color.g = ((10+std::rand()) % 25) * 0.04f;
     m_Color.b = ((10+std::rand()) % 25) * 0.04f;
 
     m_length = length;
 
-    m_Direction = NONE;
+    m_transform.rotation=0.0f;
+    m_transform.position = glm::vec2(0.0f,0.0f);
+    m_transform.scale = 1.0f;
 
 
     glm::vec3 pos0;
-    pos0.x = -length * 0.5f;
-    pos0.y = length * 0.5f;
+    pos0.x = -m_length * 0.5f;
+    pos0.y = m_length * 0.5f;
     pos0.z = 1.0f;
 
     glm::vec3 pos1;
-    pos1.x = -length * 0.5f;
-    pos1.y = -length * 0.5f;
+    pos1.x = -m_length * 0.5f;
+    pos1.y = -m_length * 0.5f;
     pos1.z = 1.0f;
 
     glm::vec3 pos2;
-    pos2.x = length * 0.5f;
-    pos2.y = -length * 0.5f;
+    pos2.x = m_length * 0.5f;
+    pos2.y = -m_length * 0.5f;
     pos2.z = 1.0f;
 
     glm::vec3 pos3;
-    pos3.x = length * 0.5f;
-    pos3.y = length * 0.5f;
+    pos3.x = m_length * 0.5f;
+    pos3.y = m_length * 0.5f;
     pos3.z = 1.0f;
 
     m_vertices.push_back(pos0);
@@ -51,42 +51,69 @@ Square::Square(float x, float y, float length)
     m_indices.push_back(3);
 }
 
-
-void Square::setDirection(Square::DIRECTION direction)
-{
-    m_Direction = direction;
-}
-
-
-glm::vec3 Square::getPosition()
-{
-    return m_Position;
-}
-
 glm::vec4 Square::getColor()
 {
     return m_Color;
 }
 
-void Square::move() {
+void Square::move(Square::DIRECTION direction) {
 
-    switch (m_Direction)
+    switch (direction)
     {
         case DIR_RIGHT:
-            m_Position+= glm::vec3(m_length,0.0f,0.0f);
+            m_transform.position.x += 0.1f;
             break;
         case DIR_LEFT:
-            m_Position+= glm::vec3(-m_length,0.0f,0.0f);
+            m_transform.position.x -= 0.1f;
             break;
         case DIR_UP:
-            m_Position+= glm::vec3(0.0f,m_length,0.0f);
+            m_transform.position.y += 0.1f;
             break;
         case DIR_DOWN:
-            m_Position+= glm::vec3(0.0f,-m_length,0.0f);
+            m_transform.position.y -= 0.1f;
             break;
         case NONE:
             break;
+
     }
+}
+
+void Square::scale(Square::SCALE direction)
+{
+    switch (direction)
+    {
+        case UP:
+            m_transform.scale += 0.1f;
+            break;
+        case DOWN:
+            m_transform.scale -= 0.1f;
+            break;
+    }
+}
+
+void Square::rotate(Square::ROTATE rotate)
+{
+
+    switch (rotate)
+    {
+        case CLOCKWISE:
+            m_transform.rotation += 10;
+            break;
+        case COUNTER_CLOCKWISE:
+            m_transform.rotation -= 10;
+            break;
+    }
+}
+
+const glm::mat3* Square::getTransformMatrix()
+{
+
+    glm::mat3 mtxRotation = glm::rotate(glm::mat3(1), glm::radians(m_transform.rotation));
+    glm::mat3 mtxTranslation = glm::translate(glm::mat3(1),m_transform.position);
+    glm::mat3 mtxScale =glm::scale(glm::mat3(1),glm::vec2(m_transform.scale,m_transform.scale));
+    m_transform.transformMatrix = mtxTranslation * mtxRotation * mtxScale;
+
+    return &m_transform.transformMatrix;
 }
 
 const void *Square::getVertices() {
@@ -102,9 +129,13 @@ int Square::getSizeOfVertices() {
 }
 
 int Square::getSizeOfIndices() {
-    return sizeof(long)*getCountOfIndices();
+    return sizeof(unsigned int)*getCountOfIndices();
 }
 
 int Square::getCountOfIndices() {
     return m_indices.size();
 }
+
+
+
+
