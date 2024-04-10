@@ -16,6 +16,31 @@ Square::Square(float x, float y, float length)
     m_length = length;
 
     m_Direction = DIR_RIGHT;
+
+    // Karenin kenarlarını tanımla
+    m_vertices[0] = -length * 0.5f;
+    m_vertices[1] = length * 0.5f;
+    m_vertices[2] = 0.0f;
+
+    m_vertices[3] = -length * 0.5f;
+    m_vertices[4] = -length * 0.5f;
+    m_vertices[5] = 0.0f;
+
+    m_vertices[6] = length * 0.5f;
+    m_vertices[7] = -length * 0.5f;
+    m_vertices[8] = 0.0f;
+
+    m_vertices[9] = -length * 0.5f;
+    m_vertices[10] = length * 0.5f;
+    m_vertices[11] = 0.0f;
+
+    m_vertices[12] = length * 0.5f;
+    m_vertices[13] = -length * 0.5f;
+    m_vertices[14] = 0.0f;
+
+    m_vertices[15] = length * 0.5f;
+    m_vertices[16] = length * 0.5f;
+    m_vertices[17] = 0.0f;
 }
 
 
@@ -52,4 +77,12 @@ void Square::move() {
             m_Position+= glm::vec3(0.0f,-m_length,0.0f);
             break;
     }
+}
+
+const void *Square::getVertices() {
+    return &m_vertices;
+}
+
+int Square::getSizeOfVertices() {
+    return sizeof(m_vertices); //18 float her biri 4 byte => 72
 }

@@ -21,12 +21,15 @@ public:
     glm::vec4 getColor();
     void move();
     void setDirection(DIRECTION direction);
+    const void* getVertices();
+    int getSizeOfVertices();
 
 private:
    glm::vec3 m_Position;
    glm::vec4 m_Color;
    float m_length;
 
+   float m_vertices[18];
    DIRECTION m_Direction;
 };
 

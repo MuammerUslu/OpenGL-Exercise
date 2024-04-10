@@ -11,17 +11,6 @@ float length=0.08f;
 
 Square square(0.0f,0.0f,length);
 
-//noktalara ait koordinat bilgileri.
-float vertices[] = {
-    -length*0.5f, length*0.5f, 0.0f,
-    -length*0.5f, -length*0.5f, 0.0f,
-    length*0.5f,  -length*0.5f, 0.0f,
-
-    -length*0.5f, length*0.5f, 0.0f,
-    length*0.5f,  -length*0.5f, 0.0f,
-    length*0.5f, length*0.5f, 0.0f,
-};
-
 //vertex array object
 unsigned int VAO;
 //vertex buffer object
@@ -98,7 +87,7 @@ int main(int argc , char** argv)
     glBindVertexArray(VAO); // aktif olacak vertex array
     glBindBuffer(GL_ARRAY_BUFFER,VBO); //aktif olacak buffer'ı belirliyoruz. id ile kullanılmıyor. kullanmadan önce buffer aktif ediliyor.
 
-    glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW); //buffer'ımızı grafik karttakiyle bağladık. (aktif olan VBO)
+    glBufferData(GL_ARRAY_BUFFER,square.getSizeOfVertices(),square.getVertices(),GL_STATIC_DRAW); //buffer'ımızı grafik karttakiyle bağladık. (aktif olan VBO)
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),(void*)0); //0 nolu slota,3 elemanlı,türü GL_FlOAT,normalized etme,bir vertex'in boyutu,attribute'un vertex byte dizisi içerisinde hangi adresten başladığı
 
     glEnableVertexAttribArray(0); //0 nolu slotu aktive et
@@ -112,7 +101,7 @@ int main(int argc , char** argv)
         program.use();
 
         //çizimde kullanılacak olan Vertex array object aktif ediliyor
-        glBindVertexArray(VAO);
+        //glBindVertexArray(VAO);
 
         program.setVec3("uMove", square.getPosition());
         program.setVec4("uColor", square.getColor());
