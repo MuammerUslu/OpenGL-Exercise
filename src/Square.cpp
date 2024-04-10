@@ -15,32 +15,40 @@ Square::Square(float x, float y, float length)
 
     m_length = length;
 
-    m_Direction = DIR_RIGHT;
+    m_Direction = NONE;
 
-    // Karenin kenarlarını tanımla
-    m_vertices[0] = -length * 0.5f;
-    m_vertices[1] = length * 0.5f;
-    m_vertices[2] = 0.0f;
 
-    m_vertices[3] = -length * 0.5f;
-    m_vertices[4] = -length * 0.5f;
-    m_vertices[5] = 0.0f;
+    glm::vec3 pos0;
+    pos0.x = -length * 0.5f;
+    pos0.y = length * 0.5f;
+    pos0.z = 1.0f;
 
-    m_vertices[6] = length * 0.5f;
-    m_vertices[7] = -length * 0.5f;
-    m_vertices[8] = 0.0f;
+    glm::vec3 pos1;
+    pos1.x = -length * 0.5f;
+    pos1.y = -length * 0.5f;
+    pos1.z = 1.0f;
 
-    m_vertices[9] = -length * 0.5f;
-    m_vertices[10] = length * 0.5f;
-    m_vertices[11] = 0.0f;
+    glm::vec3 pos2;
+    pos2.x = length * 0.5f;
+    pos2.y = -length * 0.5f;
+    pos2.z = 1.0f;
 
-    m_vertices[12] = length * 0.5f;
-    m_vertices[13] = -length * 0.5f;
-    m_vertices[14] = 0.0f;
+    glm::vec3 pos3;
+    pos3.x = length * 0.5f;
+    pos3.y = length * 0.5f;
+    pos3.z = 1.0f;
 
-    m_vertices[15] = length * 0.5f;
-    m_vertices[16] = length * 0.5f;
-    m_vertices[17] = 0.0f;
+    m_vertices.push_back(pos0);
+    m_vertices.push_back(pos1);
+    m_vertices.push_back(pos2);
+    m_vertices.push_back(pos3);
+
+    m_indices.push_back(0);
+    m_indices.push_back(1);
+    m_indices.push_back(2);
+    m_indices.push_back(0);
+    m_indices.push_back(2);
+    m_indices.push_back(3);
 }
 
 
@@ -76,13 +84,27 @@ void Square::move() {
         case DIR_DOWN:
             m_Position+= glm::vec3(0.0f,-m_length,0.0f);
             break;
+        case NONE:
+            break;
     }
 }
 
 const void *Square::getVertices() {
-    return &m_vertices;
+    return &m_vertices[0];
+}
+
+const void *Square::getIndices() {
+    return &m_indices[0];
 }
 
 int Square::getSizeOfVertices() {
-    return sizeof(m_vertices); //18 float her biri 4 byte => 72
+    return sizeof(glm::vec3)*m_vertices.size();
+}
+
+int Square::getSizeOfIndices() {
+    return sizeof(long)*getCountOfIndices();
+}
+
+int Square::getCountOfIndices() {
+    return m_indices.size();
 }

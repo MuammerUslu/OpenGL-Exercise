@@ -30,6 +30,11 @@ void ShaderProgram::setVec4(const std::string& varName,const glm::vec4& value)
     glUniform4f(m_UniformVars[varName],value.r,value.g,value.b,value.a);
 }
 
+void ShaderProgram::setMat3(const std::string &varName, const glm::mat3 *ptrValue)
+{
+    glUniformMatrix3fv(m_UniformVars[varName],1,false,(GLfloat*)ptrValue);
+}
+
 void ShaderProgram::link()
 {
     glLinkProgram(m_ProgramId);
@@ -111,3 +116,5 @@ std::string ShaderProgram::getShaderFromFile(const char* fileName)
     return data;
 
 }
+
+

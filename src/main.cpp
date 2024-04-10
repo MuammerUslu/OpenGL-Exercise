@@ -15,7 +15,8 @@ Square square(0.0f,0.0f,length);
 unsigned int VAO;
 //vertex buffer object
 unsigned int VBO;
-
+//index buffer
+unsigned int EBO;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -83,6 +84,8 @@ int main(int argc , char** argv)
 
     glGenVertexArrays(1,&VAO);
     glGenBuffers(1,&VBO);
+    glGenBuffers(1, &EBO);
+
 
     glBindVertexArray(VAO); // aktif olacak vertex array
     glBindBuffer(GL_ARRAY_BUFFER,VBO); //aktif olacak buffer'ı belirliyoruz. id ile kullanılmıyor. kullanmadan önce buffer aktif ediliyor.
@@ -91,6 +94,9 @@ int main(int argc , char** argv)
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),(void*)0); //0 nolu slota,3 elemanlı,türü GL_FlOAT,normalized etme,bir vertex'in boyutu,attribute'un vertex byte dizisi içerisinde hangi adresten başladığı
 
     glEnableVertexAttribArray(0); //0 nolu slotu aktive et
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, square.getSizeOfIndices(), square.getIndices(), GL_STATIC_DRAW);
 
     while(!glfwWindowShouldClose(window))
     {
@@ -105,9 +111,11 @@ int main(int argc , char** argv)
 
         program.setVec3("uMove", square.getPosition());
         program.setVec4("uColor", square.getColor());
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
 
         square.move();
+
+        glDrawElements(GL_TRIANGLES, square.getCountOfIndices(), GL_UNSIGNED_INT, 0);
 
         std::this_thread::sleep_for (std::chrono::milliseconds(50));
         glfwSwapBuffers(window);
