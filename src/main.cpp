@@ -5,11 +5,16 @@
 #include <GLFW/glfw3.h>
 #include "shaderprogram.hpp"
 #include <glm/glm.hpp>
+#include<glm/gtx/matrix_transform_2d.hpp>
 #include "Square.hpp"
 
 float length=0.08f;
 
 Square square(0.0f,0.0f,length);
+
+float angle;
+glm::vec2 position;
+float scale;
 
 //vertex array object
 unsigned int VAO;
@@ -17,7 +22,6 @@ unsigned int VAO;
 unsigned int VBO;
 //index buffer
 unsigned int EBO;
-
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_ESCAPE)
@@ -27,19 +31,30 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     {
         if(key==GLFW_KEY_LEFT)
         {
-            square.setDirection(Square::DIR_LEFT);
+            position.x-=0.01;
         }
         if(key==GLFW_KEY_RIGHT)
         {
-            square.setDirection(Square::DIR_RIGHT);
+            position.x+=0.01;
         }
         if(key==GLFW_KEY_UP)
         {
-            square.setDirection(Square::DIR_UP);
+            position.y+=0.01;
         }
         if(key==GLFW_KEY_DOWN)
         {
-            square.setDirection(Square::DIR_DOWN);
+            position.y-=0.01;
+        }
+
+
+        if(key==GLFW_KEY_Q)
+        {
+            scale-=0.1;
+        }
+
+        if(key==GLFW_KEY_W)
+        {
+            scale+=0.1;
         }
     }
 
@@ -73,6 +88,12 @@ int main(int argc , char** argv)
         return -1;
     }
 
+    glm::mat3 mtxTransform(1);
+
+    angle=0.0f;
+    position = glm::vec2(0.0f,0.0f);
+    scale = 1.0f;
+
     ShaderProgram program;
 
     program.attachShader("../shaders/simplevs.glsl",GL_VERTEX_SHADER);
@@ -81,6 +102,7 @@ int main(int argc , char** argv)
 
     program.addUniform("uMove");
     program.addUniform("uColor");
+    program.addUniform("uMtxTransform");
 
     glGenVertexArrays(1,&VAO);
     glGenBuffers(1,&VBO);
@@ -103,6 +125,13 @@ int main(int argc , char** argv)
         glClearColor(0.0f,0.25f,0.5f,1.0f);//ekranı temizleyip rengini veriyoruz
         glClear(GL_COLOR_BUFFER_BIT);
 
+        glm::mat3 mtxRotation = glm::rotate(glm::mat3(1), glm::radians(angle));
+        glm::mat3 mtxTranslation = glm::translate(glm::mat3(1),position);
+        glm::mat3 mtxScale =glm::scale(glm::mat3(1),glm::vec2(scale,scale));
+        mtxTransform = mtxTranslation * mtxRotation * mtxScale;
+
+        angle+=1.0f;
+
         //çizimde kullanılacak olan program nesnesi aktif ediliyor
         program.use();
 
@@ -111,6 +140,8 @@ int main(int argc , char** argv)
 
         program.setVec3("uMove", square.getPosition());
         program.setVec4("uColor", square.getColor());
+        program.setMat3("uMtxTransform",&mtxTransform);
+
         //glDrawArrays(GL_TRIANGLES, 0, 6);
 
         square.move();

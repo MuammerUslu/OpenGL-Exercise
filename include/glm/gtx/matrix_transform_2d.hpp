@@ -12,7 +12,7 @@
 /// Defines functions that generate common 2d transformation matrices.
 
 #pragma once
-
+#define GLM_ENABLE_EXPERIMENTAL
 // Dependency:
 #include "../mat3x3.hpp"
 #include "../vec2.hpp"
