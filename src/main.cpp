@@ -6,8 +6,7 @@
 #include "shaderprogram.hpp"
 #include <glm/glm.hpp>
 #include "Square.hpp"
-#define STB_IMAGE_IMPLEMENTATION
-#include<stb/stb_image.h>
+#include "texturemanager.hpp"
 
 float length=0.5f;
 
@@ -109,28 +108,11 @@ int main(int argc , char** argv)
     program.addUniform("uColor");
     program.addUniform("uMtxTransform");
 
-
-    int width, height, nrChannels;
-
-    unsigned char*data =stbi_load("../images/container.jpg",&width,&height,&nrChannels,0);
-
-    glGenTextures(1,&texture);
-    glBindTexture(GL_TEXTURE_2D,texture);
-
-    glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,data);
-
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    stbi_image_free(data);
-
+    texture= TextureManager::getInstance()->loadTexture("../images/container.jpg");
 
     glGenVertexArrays(1,&VAO);
     glGenBuffers(1,&VBO);
     glGenBuffers(1, &EBO);
-
 
     glBindVertexArray(VAO); // aktif olacak vertex array
     glBindBuffer(GL_ARRAY_BUFFER,VBO); //aktif olacak buffer'ı belirliyoruz. id ile kullanılmıyor. kullanmadan önce buffer aktif ediliyor.
@@ -154,6 +136,8 @@ int main(int argc , char** argv)
 
         //çizimde kullanılacak olan program nesnesi aktif ediliyor
         program.use();
+
+        TextureManager::getInstance()->activateTexture(GL_TEXTURE0,texture);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D,texture);

@@ -13,7 +13,8 @@ set( PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/main.cpp
         ${PROJECT_SOURCE_DIR}/glad.c
         ${PROJECT_SOURCE_DIR}/shaderprogram.cpp
-        ${PROJECT_SOURCE_DIR}//Square.cpp
+        ${PROJECT_SOURCE_DIR}/Square.cpp
+        ${PROJECT_SOURCE_DIR}/texturemanager.cpp
 ) #glad kütüphanesi de projemizle beraber derlenecek.
 
 set(PROJECT_HEADERS
