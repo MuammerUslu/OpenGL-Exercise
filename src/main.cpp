@@ -101,10 +101,12 @@ int main(int argc , char** argv)
     glm::mat4 mtxCam = glm::lookAt(camPosition,camLookAt,camUp);
     glm::mat4 mtxProj = glm::perspective(glm::radians(90.0f),(800.0f/800.0f),1.0f,100.0f);
 
+    glEnable(GL_DEPTH_TEST);
+    
     while(!glfwWindowShouldClose(window))
     {
         glClearColor(0.0f,0.25f,0.5f,1.0f);//ekranı temizleyip rengini veriyoruz
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); // frame buffer ve z-buffer'ları temizle
 
         //çizimde kullanılacak olan program nesnesi aktif ediliyor
         program.use();
