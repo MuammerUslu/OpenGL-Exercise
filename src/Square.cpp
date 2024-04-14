@@ -14,34 +14,24 @@ Square::Square(float x, float y, float length)
     m_length = length;
 
     m_transform.rotation=0.0f;
-    m_transform.position = glm::vec2(0.0f,0.0f);
+    m_transform.position = glm::vec3(0.0f,0.0f,1.0f);
     m_transform.scale = 1.0f;
 
+    Vertex v0,v1,v2,v3;
+    v0.pos = glm::vec3(-length/2,length/2,0.0f);
+    v1.pos = glm::vec3(-length/2,-length/2,0.0f);
+    v2.pos = glm::vec3(length/2,-length/2,0.0f);
+    v3.pos = glm::vec3(length/2,length/2,0.0f);
 
-    glm::vec3 pos0;
-    pos0.x = -m_length * 0.5f;
-    pos0.y = m_length * 0.5f;
-    pos0.z = 1.0f;
+    v0.tex = glm::vec2(0.0f,1.0f);
+    v1.tex = glm::vec2(0.0f,0.0f);
+    v2.tex = glm::vec2(1.0f,0.0f);
+    v3.tex = glm::vec2(1.0f,1.0f);
 
-    glm::vec3 pos1;
-    pos1.x = -m_length * 0.5f;
-    pos1.y = -m_length * 0.5f;
-    pos1.z = 1.0f;
-
-    glm::vec3 pos2;
-    pos2.x = m_length * 0.5f;
-    pos2.y = -m_length * 0.5f;
-    pos2.z = 1.0f;
-
-    glm::vec3 pos3;
-    pos3.x = m_length * 0.5f;
-    pos3.y = m_length * 0.5f;
-    pos3.z = 1.0f;
-
-    m_vertices.push_back(pos0);
-    m_vertices.push_back(pos1);
-    m_vertices.push_back(pos2);
-    m_vertices.push_back(pos3);
+    m_vertices.push_back(v0);
+    m_vertices.push_back(v1);
+    m_vertices.push_back(v2);
+    m_vertices.push_back(v3);
 
     m_indices.push_back(0);
     m_indices.push_back(1);
@@ -61,16 +51,16 @@ void Square::move(Square::DIRECTION direction) {
     switch (direction)
     {
         case DIR_RIGHT:
-            m_transform.position.x += 0.1f;
+            m_transform.position.x += 0.5f;
             break;
         case DIR_LEFT:
-            m_transform.position.x -= 0.1f;
+            m_transform.position.x -= 0.5f;
             break;
         case DIR_UP:
-            m_transform.position.y += 0.1f;
+            m_transform.position.y += 0.5f;
             break;
         case DIR_DOWN:
-            m_transform.position.y -= 0.1f;
+            m_transform.position.y -= 0.5f;
             break;
         case NONE:
             break;
@@ -107,13 +97,12 @@ void Square::rotate(Square::ROTATE rotate)
 
 const glm::mat3* Square::getTransformMatrix()
 {
-
     glm::mat3 mtxRotation = glm::rotate(glm::mat3(1), glm::radians(m_transform.rotation));
-    glm::mat3 mtxTranslation = glm::translate(glm::mat3(1),m_transform.position);
+    glm::mat3 mtxTranslation = glm::translate(glm::mat3(1), glm::vec2(m_transform.position.x, m_transform.position.y));
     glm::mat3 mtxScale =glm::scale(glm::mat3(1),glm::vec2(m_transform.scale,m_transform.scale));
-    m_transform.transformMatrix = mtxTranslation * mtxRotation * mtxScale;
+    m_transformMatrix = mtxTranslation * mtxRotation * mtxScale;
 
-    return &m_transform.transformMatrix;
+    return &m_transformMatrix;
 }
 
 const void *Square::getVertices() {
@@ -125,7 +114,7 @@ const void *Square::getIndices() {
 }
 
 int Square::getSizeOfVertices() {
-    return sizeof(glm::vec3)*m_vertices.size();
+    return sizeof(Vertex)*m_vertices.size();
 }
 
 int Square::getSizeOfIndices() {

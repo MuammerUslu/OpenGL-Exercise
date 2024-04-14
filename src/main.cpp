@@ -6,8 +6,10 @@
 #include "shaderprogram.hpp"
 #include <glm/glm.hpp>
 #include "Square.hpp"
+#define STB_IMAGE_IMPLEMENTATION
+#include<stb/stb_image.h>
 
-float length=0.08f;
+float length=0.5f;
 
 Square square(0.0f,0.0f,length);
 
@@ -17,6 +19,9 @@ unsigned int VAO;
 unsigned int VBO;
 //index buffer
 unsigned int EBO;
+//texture
+unsigned int texture;
+
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -25,13 +30,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
     if(action==GLFW_PRESS)
     {
-        if(key==GLFW_KEY_LEFT)
-        {
-            square.move(Square::DIR_LEFT);
-        }
         if(key==GLFW_KEY_RIGHT)
         {
             square.move(Square::DIR_RIGHT);
+        }
+        if(key==GLFW_KEY_LEFT)
+        {
+            square.move(Square::DIR_LEFT);
         }
         if(key==GLFW_KEY_UP)
         {
@@ -104,6 +109,24 @@ int main(int argc , char** argv)
     program.addUniform("uColor");
     program.addUniform("uMtxTransform");
 
+
+    int width, height, nrChannels;
+
+    unsigned char*data =stbi_load("../images/container.jpg",&width,&height,&nrChannels,0);
+
+    glGenTextures(1,&texture);
+    glBindTexture(GL_TEXTURE_2D,texture);
+
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,data);
+
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    stbi_image_free(data);
+
+
     glGenVertexArrays(1,&VAO);
     glGenBuffers(1,&VBO);
     glGenBuffers(1, &EBO);
@@ -113,9 +136,13 @@ int main(int argc , char** argv)
     glBindBuffer(GL_ARRAY_BUFFER,VBO); //aktif olacak buffer'ı belirliyoruz. id ile kullanılmıyor. kullanmadan önce buffer aktif ediliyor.
 
     glBufferData(GL_ARRAY_BUFFER,square.getSizeOfVertices(),square.getVertices(),GL_STATIC_DRAW); //buffer'ımızı grafik karttakiyle bağladık. (aktif olan VBO)
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),(void*)0); //0 nolu slota,3 elemanlı,türü GL_FlOAT,normalized etme,bir vertex'in boyutu,attribute'un vertex byte dizisi içerisinde hangi adresten başladığı
 
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,sizeof(Vertex),(void*)0); //0 nolu slota,3 elemanlı,türü GL_FlOAT,normalized etme,bir vertex'in boyutu,attribute'un vertex byte dizisi içerisinde hangi adresten başladığı
     glEnableVertexAttribArray(0); //0 nolu slotu aktive et
+
+    //texture bilgileri belirtiliyor.
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3*sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, square.getSizeOfIndices(), square.getIndices(), GL_STATIC_DRAW); // bu örnekte 6
@@ -128,13 +155,15 @@ int main(int argc , char** argv)
         //çizimde kullanılacak olan program nesnesi aktif ediliyor
         program.use();
 
-        //çizimde kullanılacak olan Vertex array object aktif ediliyor
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D,texture);
         //glBindVertexArray(VAO);
 
         program.setVec4("uColor", square.getColor());
         program.setMat3("uMtxTransform",square.getTransformMatrix());
 
         //glDrawArrays(GL_TRIANGLES, 0, 6);
+        square.move(Square::DIR_RIGHT);
 
         glDrawElements(GL_TRIANGLES, square.getCountOfIndices(), GL_UNSIGNED_INT, 0);
 

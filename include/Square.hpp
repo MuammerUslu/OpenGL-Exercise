@@ -7,10 +7,15 @@
 #include <cmath>
 #include<glm/gtx/matrix_transform_2d.hpp>
 
+struct Vertex
+{
+    glm::vec3 pos;
+    glm::vec2 tex;
+};
+
 struct Transform{
-    glm::mat3 transformMatrix;
     float rotation;
-    glm::vec2 position;
+    glm::vec3 position;
     float scale;
 };
 
@@ -56,7 +61,8 @@ private:
    glm::vec4 m_Color;
    float m_length;
    Transform m_transform;
-   std::vector<glm::vec3> m_vertices;
+   glm::mat3 m_transformMatrix; // pointer ile gönderiliyor. O yüzden belirli bir adrese sahip olması gerekiyor.
+   std::vector<Vertex> m_vertices;
    std::vector<unsigned int> m_indices;
 };
 
