@@ -22,6 +22,7 @@ public:
     void setVec3(const std::string& varName,const glm::vec3& value);
     void setVec4(const std::string& varName,const glm::vec4& value);
     void setMat3(const std::string& varName,const glm::mat3* ptrValue);
+    void setMat4(const std::string& varName,const glm::mat4* ptrValue);
 
 private:
     std::string getShaderFromFile(const char* fileName);

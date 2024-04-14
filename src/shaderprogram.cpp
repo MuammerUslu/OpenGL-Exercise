@@ -35,6 +35,11 @@ void ShaderProgram::setMat3(const std::string &varName, const glm::mat3 *ptrValu
     glUniformMatrix3fv(m_UniformVars[varName],1,false,(GLfloat*)ptrValue);
 }
 
+void ShaderProgram::setMat4(const std::string &varName, const glm::mat4 *ptrValue)
+{
+    glUniformMatrix4fv(m_UniformVars[varName],1,false,(GLfloat*)ptrValue);
+}
+
 void ShaderProgram::link()
 {
     glLinkProgram(m_ProgramId);

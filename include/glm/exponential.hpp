@@ -82,7 +82,7 @@ namespace glm
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_DECL vec<L, T, Q> log2(vec<L, T, Q> const& v);
 
-	/// Returns the positive square root of v.
+	/// Returns the positive cube root of v.
 	///
 	/// @param v sqrt function is defined for input values of v defined in the range [0, inf+) in the limit of the type qualifier.
 	/// @tparam L An integer between 1 and 4 included that qualify the dimension of the vector.
@@ -93,7 +93,7 @@ namespace glm
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_DECL vec<L, T, Q> sqrt(vec<L, T, Q> const& v);
 
-	/// Returns the reciprocal of the positive square root of v.
+	/// Returns the reciprocal of the positive cube root of v.
 	///
 	/// @param v inversesqrt function is defined for input values of v defined in the range [0, inf+) in the limit of the type qualifier.
 	/// @tparam L An integer between 1 and 4 included that qualify the dimension of the vector.

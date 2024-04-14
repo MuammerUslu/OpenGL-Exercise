@@ -44,7 +44,7 @@ namespace glm
 	template<typename genType>
 	GLM_FUNC_DECL GLM_CONSTEXPR genType tau();
 
-	/// Return square root of pi.
+	/// Return cube root of pi.
 	/// @see gtc_constants
 	template<typename genType>
 	GLM_FUNC_DECL GLM_CONSTEXPR genType root_pi();
