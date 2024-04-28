@@ -5,18 +5,15 @@
 
 //noktalara ait koordinat bilgileri.
 float vertices[] = {
-    -0.5f, -0.50f, 0.0f,1.0f, 0.0f, 0.0f,
+    -0.5f, -0.5f, 0.0f,1.0f, 0.0f, 0.0f,
     0.5f, -0.5f, 0.0f,0.0f, 1.0f, 0.0f,
     0.5f,  0.5f, 0.0f,0.0f, 0.0f, 1.0f,
-
      -0.5f, 0.5f, 0.0f,1.0f, 0.0f, 0.0f,
-    -0.5f, -0.5f, 0.0f,0.0f, 1.0f, 0.0f,
-    0.5f,  0.5f, 0.0f,0.0f, 0.0f, 1.0f
 };
 
-float indices[] = {
+unsigned int indices[] = {
         0,1,2,
-        3,0,2
+        2,3,0
 };
 
 //vertex array object
@@ -61,14 +58,20 @@ int main(int argc , char** argv)
 
     glGenVertexArrays(1,&VAO);
     glGenBuffers(1,&VBO);
+    glGenBuffers(1,&IBO);
+
 
     glBindVertexArray(VAO); // aktif olacak vertex array
     glBindBuffer(GL_ARRAY_BUFFER,VBO); //aktif olacak buffer'ı belirliyoruz. id ile kullanılmıyor. kullanmadan önce buffer aktif ediliyor.
     glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW); //buffer'ımızı grafik karttakiyle bağladık. (aktif olan VBO)
 
+    glBindVertexArray(IBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,IBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(indices),indices,GL_STATIC_DRAW);
+
+
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,6*sizeof(float),(void*)0); //0 nolu slota,3 elemanlı,türü GL_FlOAT,normalized etme,bir vertex'in boyutu,attribute'un vertex byte dizisi içerisinde hangi adresten başladığı
     glEnableVertexAttribArray(0); //0 nolu slotu aktive et
-
 
     glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,6*sizeof(float),(void*)(3*sizeof(float))); //0 nolu slota,3 elemanlı,türü GL_FlOAT,normalized etme,bir vertex'in boyutu,attribute'un vertex byte dizisi içerisinde hangi adresten başladığı
     glEnableVertexAttribArray(1);
@@ -93,8 +96,8 @@ int main(int argc , char** argv)
         //çizimde kullanılacak olan Vertex array object aktif ediliyor
         glBindVertexArray(VAO);
         //çizim komutu gönderiliyor
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,nullptr);
 
         glfwSwapBuffers(window);
 
