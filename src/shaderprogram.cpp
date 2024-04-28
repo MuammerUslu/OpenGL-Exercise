@@ -13,10 +13,29 @@ ShaderProgram::~ShaderProgram()
 void ShaderProgram::link()
 {
     glLinkProgram(m_ProgramId);
+    int isLinked;
+    char log[512];
+    glGetShaderiv(m_ProgramId,GL_LINK_STATUS,&isLinked);
+
+    if(!isLinked)
+    {
+        glGetProgramInfoLog(m_ProgramId,512,0,log);
+
+        std::cout<<"Program Linking Error:"<<std::endl<<log<<std::endl;
+    }
 }
 void ShaderProgram::use()
 {
     glUseProgram(m_ProgramId);
+}
+
+void ShaderProgram::addUniform(const std::string& varName)
+{
+    m_UniformVars[varName] = glGetUniformLocation(m_ProgramId,varName.c_str());
+}
+void ShaderProgram::setFloat(const std::string& varName,float value)
+{
+    glUniform1f(m_UniformVars[varName],value);
 }
 
 void ShaderProgram::attachShader(const char* fileName,unsigned int shaderType)
@@ -30,6 +49,26 @@ void ShaderProgram::attachShader(const char* fileName,unsigned int shaderType)
     glShaderSource(shaderId,1,&chSourceCode,0);
 
     glCompileShader(shaderId);
+
+    int isCompiled;
+    char log[512];
+    glGetShaderiv(shaderId,GL_COMPILE_STATUS,&isCompiled);
+
+    if(!isCompiled)
+    {
+        glGetShaderInfoLog(shaderId,512,0,log);
+        std::string strType;
+        switch(shaderType)
+        {
+            case GL_VERTEX_SHADER:
+                strType="Vertex Shader";
+                break;
+            case GL_FRAGMENT_SHADER:
+                strType="Fragment Shader";
+                break;
+        }
+        std::cout<<"Error when compiling shader. Type:"<<strType<<std::endl<<log<<std::endl;
+    }
 
     glAttachShader(m_ProgramId,shaderId);
 
