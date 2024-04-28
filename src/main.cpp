@@ -3,6 +3,28 @@
 #include <GLFW/glfw3.h>
 #include "shaderprogram.hpp"
 
+#define ASSERT(x) if (!(x)) __builtin_trap();
+#define GLCall(x) GLClearError();\
+    x;\
+    ASSERT(GLLogCall(#x,__FILE__,__LINE__))
+
+static void GLClearError() {
+    GLenum error;
+    while ((error = glGetError()) != GL_NO_ERROR) {
+        std::cout << "[OpenGL Error] (" << error << ")" << std::endl;
+    }
+}
+
+static bool GLLogCall(const char* function, const char* file, int line) {
+    GLenum error;
+    bool hasError = false;
+    while ((error = glGetError()) != GL_NO_ERROR) {
+        std::cout << "[OpenGL Error] (" << error << "): " << function << " " << file << ":" << line << std::endl;
+        hasError = true;
+    }
+    return !hasError;
+}
+
 //noktalara ait koordinat bilgileri.
 float vertices[] = {
     -0.5f, -0.5f, 0.0f,1.0f, 0.0f, 0.0f,
@@ -97,7 +119,12 @@ int main(int argc , char** argv)
         glBindVertexArray(VAO);
         //çizim komutu gönderiliyor
         //glDrawArrays(GL_TRIANGLES, 0, 6);
-        glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,nullptr);
+
+       glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,nullptr); // GL_INT yerine GL_UNSIGNED_INT olmalıydı. 1280 error kodu
+
+
+        //GLCall(glDrawElements(GL_TRIANGLES,6,GL_INT,nullptr)); // GL_INT yerine GL_UNSIGNED_INT olmalıydı. 1280 error kodu
+
 
         glfwSwapBuffers(window);
 
